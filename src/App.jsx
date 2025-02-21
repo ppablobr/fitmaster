@@ -1,20 +1,47 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { Home } from './pages/Home'
-import { ExerciseTracker } from './pages/ExerciseTracker'
-import { Dashboard } from './pages/Dashboard'
-import { Layout } from './components/Layout'
+    import React from 'react'
+    import { Routes, Route, Navigate } from 'react-router-dom'
+    import { Home } from './pages/Home'
+    import { ExerciseTracker } from './pages/ExerciseTracker'
+    import { Dashboard } from './pages/Dashboard'
+    import { Layout } from './components/Layout'
+    import { Auth } from './components/Auth'
+    import { supabase } from './lib/supabase'
 
-function App() {
-  return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/tracker" element={<ExerciseTracker />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Route>
-    </Routes>
-  )
-}
+    function App() {
+      const [user, setUser] = React.useState(null);
 
-export default App
+      React.useEffect(() => {
+        const fetchUser = async () => {
+          const { data: { user } } = await supabase.auth.getUser()
+          setUser(user)
+        }
+        fetchUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+          setUser(session?.user ?? null)
+        })
+
+        return () => {
+          authListener?.subscription.unsubscribe()
+        }
+      }, []);
+
+      return (
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/tracker"
+              element={user ? <ExerciseTracker /> : <Navigate to="/login" replace />}
+            />
+            <Route
+              path="/dashboard"
+              element={user ? <Dashboard /> : <Navigate to="/login" replace />}
+            />
+            <Route path="/login" element={<Auth />} />
+          </Route>
+        </Routes>
+      )
+    }
+
+    export default App

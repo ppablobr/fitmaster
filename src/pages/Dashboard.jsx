@@ -183,21 +183,21 @@ export function Dashboard() {
         labels,
         datasets: [
           {
-            type: 'bar',
-            label: 'Distance (km)',
-            data: distances,
-            backgroundColor: 'rgb(53, 162, 235)',
-            yAxisID: 'y',
-            z: 0, // Ensure bars are behind the line
-          },
-          {
             type: 'line',
             label: 'Pace (min/km)',
             data: paces,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
-            yAxisID: 'y1',
+            yAxisID: 'y',
             z: 1, // Ensure line is in front of bars
+          },
+          {
+            type: 'bar',
+            label: 'Distance (km)',
+            data: distances,
+            backgroundColor: 'rgb(53, 162, 235)',
+            yAxisID: 'y1',
+            z: 0, // Ensure bars are behind the line
           },
         ],
       })
@@ -327,7 +327,10 @@ export function Dashboard() {
                     position: 'left',
                     title: {
                       display: true,
-                      text: 'Distance (km)',
+                      text: 'Pace (min/km)',
+                    },
+                    grid: {
+                      drawOnChartArea: false,
                     },
                   },
                   y1: {
@@ -336,7 +339,7 @@ export function Dashboard() {
                     position: 'right',
                     title: {
                       display: true,
-                      text: 'Pace (min/km)',
+                      text: 'Distance (km)',
                     },
                     grid: {
                       drawOnChartArea: false,

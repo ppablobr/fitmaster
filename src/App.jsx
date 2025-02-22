@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { ExerciseTracker } from './pages/ExerciseTracker'
 import { Dashboard } from './pages/Dashboard'
 import { ManageExercises } from './pages/ManageExercises'
+import { Account } from './pages/Account'
 import { Layout } from './components/Layout'
 import { Auth } from './components/Auth'
 import { supabase } from './lib/supabase'
@@ -42,6 +43,10 @@ function App() {
         <Route
           path="/manage"
           element={user ? <ManageExercises /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/account"
+          element={user ? <Account /> : <Navigate to="/login" replace />}
         />
         <Route path="/login" element={<Auth />} />
       </Route>

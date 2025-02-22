@@ -1,13 +1,16 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Activity, LineChart, LogIn, LogOut, AlertTriangle, List } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Menu, X, Activity, LineChart, LogIn, LogOut, AlertTriangle, List, User, ChevronDown } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
   const [user, setUser] = React.useState(null)
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = React.useState(false) // New state
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = React.useState(false)
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = React.useState(false)
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -27,8 +30,9 @@ export function Navigation() {
   }, [])
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setShowLogoutConfirmation(false) // Close the confirmation dialog after logout
+    await supabase.auth.signOut();
+    navigate('/login');
+    setShowLogoutConfirmation(false);
   }
 
   const handleOpenLogoutConfirmation = () => {
@@ -50,7 +54,15 @@ export function Navigation() {
         } px-3 py-2 rounded-md text-sm font-medium
       `
 
-  const shouldShowHome = !(location.pathname === '/dashboard' || location.pathname === '/tracker' || location.pathname === '/manage')
+  const shouldShowHome = !(location.pathname === '/dashboard' || location.pathname === '/tracker' || location.pathname === '/manage' || location.pathname === '/account')
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const toggleAccountMenu = () => {
+    setIsAccountMenuOpen(!isAccountMenuOpen)
+  }
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -65,38 +77,69 @@ export function Navigation() {
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <div className="flex space-x-4">
-              {shouldShowHome && (
-                <Link to="/" className={linkClass('/')}>
-                  Home
-                </Link>
-              )}
               {user && (
-                <>
-                  <Link to="/tracker" className={linkClass('/tracker')}>
-                    Track Exercise
-                  </Link>
-                  <Link to="/dashboard" className={linkClass('/dashboard')}>
-                    <div className="flex items-center gap-1">
-                      <LineChart className="h-4 w-4" />
-                      Dashboard
+                <div className="relative">
+                  <button
+                    onClick={toggleMenu}
+                    className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                  >
+                    Menu
+                    <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {isMenuOpen && (
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        {shouldShowHome && (
+                          <Link to="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                            Home
+                          </Link>
+                        )}
+                        <Link to="/tracker" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                          Track Exercise
+                        </Link>
+                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                          Dashboard
+                        </Link>
+                        <Link to="/manage" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                          Manage Exercises
+                        </Link>
+                      </div>
                     </div>
-                  </Link>
-                  <Link to="/manage" className={linkClass('/manage')}>
-                    <div className="flex items-center gap-1">
-                      <List className="h-4 w-4" />
-                      Manage Exercises
-                    </div>
-                  </Link>
-                </>
+                  )}
+                </div>
               )}
             </div>
+
             {user ? (
-              <button onClick={handleOpenLogoutConfirmation} className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">
-                <div className="flex items-center gap-1">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </div>
-              </button>
+              <div className="relative">
+                <button
+                  onClick={toggleAccountMenu}
+                  className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                >
+                  Account
+                  <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isAccountMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isAccountMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" tabIndex="-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <div className="py-1" role="none">
+                      <Link
+                        to="/account"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        role="menuitem"
+                      >
+                        My Account
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                        role="menuitem"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link to="/login" className={linkClass('/login')}>
                 <div className="flex items-center gap-1">
@@ -163,6 +206,16 @@ export function Navigation() {
                     Manage Exercises
                   </div>
                 </Link>
+                <Link
+                  to="/account"
+                  className={`${linkClass('/account')} block`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    Account
+                  </div>
+                </Link>
               </>
             )}
             {user ? (
@@ -189,7 +242,6 @@ export function Navigation() {
         </div>
       )}
 
-      {/* Logout Confirmation Dialog */}
       {showLogoutConfirmation && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 text-center">

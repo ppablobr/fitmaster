@@ -1,7 +1,7 @@
     import React, { useEffect, useState } from 'react'
     import { supabase } from '../lib/supabase'
     import { Calendar, Clock, MapPin, Activity } from 'lucide-react'
-    import { Line } from 'react-chartjs-2'
+    import { Line, Bar, Chart } from 'react-chartjs-2' // Import Bar component
     import {
       Chart as ChartJS,
       CategoryScale,
@@ -12,6 +12,8 @@
       Title,
       Tooltip,
       Legend,
+      BarController, // Import BarController
+      LineController, // Import LineController
     } from 'chart.js'
 
     ChartJS.register(
@@ -22,7 +24,9 @@
       BarElement,
       Title,
       Tooltip,
-      Legend
+      Legend,
+      BarController, // Register BarController
+      LineController // Register LineController
     )
 
     export function Dashboard() {

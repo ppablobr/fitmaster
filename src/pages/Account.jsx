@@ -143,13 +143,17 @@ export function Account() {
               </div>
               <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Gender:</strong>
-                <input
-                  type="text"
+                <select
                   name="gender"
                   value={updatedProfile?.gender || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                />
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Height (cm):</strong>

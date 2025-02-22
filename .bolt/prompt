@@ -6,6 +6,6 @@ Use icons from lucide-react for logos.
 
 Use stock photos from unsplash where appropriate, only valid URLs you know exist. Do not download the images, only link to them in image tags.
 
-Make sure to guarantee all the content is updated with the translation of the languages of the app.
+Maintain consistent design system, styling and user experience throughout the application.
 
-Maintain consistent styling and user experience throughout the application.
+Do not change the design system if not asked, to maintain the consistency on the design of the app.

@@ -234,9 +234,6 @@ export function Dashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Exercise Dashboard</h1>
             <p className="mt-2 text-gray-600">Track your fitness progress over time</p>
           </div>
-          <Link to="/tracker" className="mt-4 sm:mt-0 flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
-            Track Exercise
-          </Link>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-2">

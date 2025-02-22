@@ -21,6 +21,8 @@ import { enUS } from 'date-fns/locale'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
+// Import package.json to read version
+import packageJson from '../../package.json'
 
 ChartJS.register(
   CategoryScale,
@@ -51,6 +53,7 @@ export function Dashboard() {
   const [userId, setUserId] = useState(null)
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
+  const [version, setVersion] = useState('1.0') // Initialize version state
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -162,6 +165,15 @@ export function Dashboard() {
     } catch (error) {
       console.error('Error fetching exercise data:', error)
       setLoading(false)
+    }
+  }
+
+  // Function to update the version (for demonstration purposes)
+  const updateVersion = (type) => {
+    if (type === 'minor') {
+      setVersion((prevVersion) => (parseFloat(prevVersion) + 0.1).toFixed(1))
+    } else if (type === 'major') {
+      setVersion((prevVersion) => (parseFloat(prevVersion) + 1).toFixed(1))
     }
   }
 
@@ -300,6 +312,13 @@ export function Dashboard() {
           </div>
         </div>
       </div>
+      <footer className="bg-transparent text-xs text-gray-500 mt-auto">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center items-center space-x-2">
+            <span>Version: {version}</span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

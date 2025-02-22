@@ -51,6 +51,11 @@ export function Auth() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name: name,
+          }
+        }
       });
 
       if (error) {
@@ -63,13 +68,26 @@ export function Auth() {
             .insert({
               id: data.user.id,
               name: name, // Save the name in the profiles table
+              email: email, // Save the email in the profiles table
             });
 
           if (profileError) {
             console.error("Error creating profile:", profileError);
             setError("Failed to create profile. Please try again.");
           } else {
-            navigate('/tracker');
+            // Update the display_name on the auth.users table
+            const { error: updateError } = await supabase.auth.updateUser({
+              data: {
+                display_name: name,
+              }
+            });
+
+            if (updateError) {
+              console.error("Error updating display_name:", updateError);
+              setError("Failed to update profile. Please try again.");
+            } else {
+              navigate('/tracker');
+            }
           }
         } else {
           // Handle cases where signup was successful, but no user is returned (e.g., email confirmation required)

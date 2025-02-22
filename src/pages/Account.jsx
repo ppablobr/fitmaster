@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import { Toast } from '../components/Toast';
 
 export function Account() {
   const [user, setUser] = useState(null);
@@ -11,6 +12,7 @@ export function Account() {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({});
   const [updatedEmail, setUpdatedEmail] = useState('');
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -71,21 +73,28 @@ export function Account() {
 
   const handleSaveProfile = async () => {
     // Update profile data
-    const { data: profileData, error: profileError } = await supabase
+    const { error: profileError } = await supabase
       .from('profiles')
       .upsert({
         id: user.id,
         ...updatedProfile,
-      })
-      .select();
+      }, { returning: 'minimal' }); // Ensure only updating, not creating new rows
 
     if (profileError) {
       console.error('Error updating profile:', profileError);
+      setToast({
+        message: 'Failed to update profile.',
+        type: 'error',
+      });
       return;
     }
 
     setProfile(updatedProfile);
     setIsEditing(false);
+    setToast({
+      message: 'Profile updated successfully!',
+      type: 'success',
+    });
   };
 
   const handleChange = (e) => {
@@ -94,6 +103,10 @@ export function Account() {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleCloseToast = () => {
+    setToast(null);
   };
 
   if (!user) {
@@ -275,6 +288,13 @@ export function Account() {
             </div>
           </div>
         </div>
+      )}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={handleCloseToast}
+        />
       )}
     </div>
   );

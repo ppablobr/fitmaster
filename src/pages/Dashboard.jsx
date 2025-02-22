@@ -186,7 +186,7 @@ export function Dashboard() {
           </Link>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4 mb-2">
           <div className="w-full">
             <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">
               Start Date
@@ -198,7 +198,7 @@ export function Dashboard() {
               className="mt-1 p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm w-full"
             />
           </div>
-          <div className="w-full">
+          <div className="w-full sm:mb-0">
             <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">
               End Date
             </label>
@@ -206,7 +206,7 @@ export function Dashboard() {
               selected={endDate}
               onChange={(date) => setEndDate(date)}
               dateFormat="yyyy-MM-dd"
-              className="mt-1 p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm w-full"
+              className="p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm w-full"
             />
           </div>
         </div>

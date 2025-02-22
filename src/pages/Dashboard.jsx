@@ -14,7 +14,10 @@
       Legend,
       BarController, // Import BarController
       LineController, // Import LineController
+      TimeScale,
     } from 'chart.js'
+    import 'chartjs-adapter-date-fns'
+    import { enUS } from 'date-fns/locale'
 
     ChartJS.register(
       CategoryScale,
@@ -26,7 +29,8 @@
       Tooltip,
       Legend,
       BarController, // Register BarController
-      LineController // Register LineController
+      LineController, // Register LineController
+      TimeScale
     )
 
     export function Dashboard() {
@@ -41,39 +45,48 @@
         datasets: [],
       })
       const [loading, setLoading] = useState(true)
-      const [userId, setUserId] = useState(null);
+      const [userId, setUserId] = useState(null)
+      const [startDate, setStartDate] = useState(null)
+      const [endDate, setEndDate] = useState(null)
 
       useEffect(() => {
         const fetchUser = async () => {
-          const { data: { user } } = await supabase.auth.getUser();
-          setUserId(user?.id);
-        };
+          const { data: { user } } = await supabase.auth.getUser()
+          setUserId(user?.id)
+        }
 
-        fetchUser();
+        fetchUser()
 
         const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-          setUserId(session?.user?.id ?? null);
-        });
+          setUserId(session?.user?.id ?? null)
+        })
 
         return () => {
-          authListener?.subscription.unsubscribe();
-        };
-      }, []);
+          authListener?.subscription.unsubscribe()
+        }
+      }, [])
 
       useEffect(() => {
         if (userId) {
-          fetchExerciseData();
+          fetchExerciseData()
         }
-      }, [userId]);
-
+      }, [userId, startDate, endDate])
 
       const fetchExerciseData = async () => {
         try {
-          const { data: exercises, error } = await supabase
+          setLoading(true)
+
+          let query = supabase
             .from('exercises')
             .select('*')
             .eq('user_id', userId) // Filter by user ID
             .order('date', { ascending: true })
+
+          if (startDate && endDate) {
+            query = query.gte('date', startDate).lte('date', endDate)
+          }
+
+          const { data: exercises, error } = await query
 
           if (error) throw error
 
@@ -94,33 +107,34 @@
           const dateGroups = exercises.reduce((groups, exercise) => {
             const date = exercise.date.split('T')[0]
             if (!groups[date]) {
-              groups[date] = { distance: 0, duration: 0 }
+              groups[date] = { distance: 0, duration: 0, pace: 0, totalDuration: 0 }
             }
             groups[date].distance += exercise.distance
-            groups[date].duration += exercise.duration
+            groups[date].totalDuration += exercise.duration
+            groups[date].pace = groups[date].totalDuration / groups[date].distance
             return groups
           }, {})
 
-          const labels = Object.keys(dateGroups).slice(-7) // Last 7 days
+          const labels = Object.keys(dateGroups) // All available dates
           const distances = labels.map(date => dateGroups[date].distance)
-          const durations = labels.map(date => dateGroups[date].duration)
+          const paces = labels.map(date => dateGroups[date].pace)
 
           setChartData({
             labels,
             datasets: [
               {
-                type: 'line',
+                type: 'bar',
                 label: 'Distance (km)',
                 data: distances,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1,
+                backgroundColor: 'rgb(53, 162, 235)',
                 yAxisID: 'y',
               },
               {
-                type: 'bar',
-                label: 'Duration (min)',
-                data: durations,
-                backgroundColor: 'rgb(53, 162, 235)',
+                type: 'line',
+                label: 'Pace (min/km)',
+                data: paces,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
                 yAxisID: 'y1',
               },
             ],
@@ -147,6 +161,31 @@
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Exercise Dashboard</h1>
               <p className="mt-2 text-gray-600">Track your fitness progress over time</p>
+            </div>
+
+            <div className="flex gap-4 mb-4">
+              <div>
+                <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  id="start-date"
+                  className="mt-1 p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
+                  onChange={e => setStartDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  id="end-date"
+                  className="mt-1 p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
+                  onChange={e => setEndDate(e.target.value)}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -192,7 +231,7 @@
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Last 7 Days Activity</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Activity Chart</h2>
               <div className="h-96">
                 <Line
                   data={chartData}
@@ -203,6 +242,14 @@
                       intersect: false,
                     },
                     scales: {
+                      x: {
+                        type: 'category',
+                        labels: chartData.labels,
+                        title: {
+                          display: true,
+                          text: 'Date',
+                        },
+                      },
                       y: {
                         type: 'linear',
                         display: true,
@@ -218,7 +265,7 @@
                         position: 'right',
                         title: {
                           display: true,
-                          text: 'Duration (min)',
+                          text: 'Pace (min/km)',
                         },
                         grid: {
                           drawOnChartArea: false,

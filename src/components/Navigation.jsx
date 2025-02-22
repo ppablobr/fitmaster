@@ -83,13 +83,13 @@ export function Navigation() {
                     onClick={toggleMenu}
                     className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center"
                   >
-                    Menu
+                    Features
                     <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {isMenuOpen && (
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                       <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        {shouldShowHome && (
+                        {!user && shouldShowHome && (
                           <Link to="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                             Home
                           </Link>
@@ -129,13 +129,6 @@ export function Navigation() {
                       >
                         My Account
                       </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                        role="menuitem"
-                      >
-                        Logout
-                      </button>
                     </div>
                   </div>
                 )}

@@ -121,7 +121,7 @@ export function Account() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">User Details</h2>
           {isEditing ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Name:</strong>
                 <input
                   type="text"
@@ -131,7 +131,7 @@ export function Account() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                 />
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Age:</strong>
                 <input
                   type="number"
@@ -141,7 +141,7 @@ export function Account() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                 />
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Gender:</strong>
                 <input
                   type="text"
@@ -151,7 +151,7 @@ export function Account() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                 />
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Height (cm):</strong>
                 <input
                   type="number"
@@ -161,7 +161,7 @@ export function Account() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                 />
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Weight (kg):</strong>
                 <input
                   type="number"
@@ -171,34 +171,34 @@ export function Account() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                 />
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Email:</strong>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Name:</strong>
                 <span className="mt-1 text-gray-900">{profile?.name || 'N/A'}</span>
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Age:</strong>
                 <span className="mt-1 text-gray-900">{profile?.age || 'N/A'}</span>
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Gender:</strong>
                 <span className="mt-1 text-gray-900">{profile?.gender || 'N/A'}</span>
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Height (cm):</strong>
                 <span className="mt-1 text-gray-900">{profile?.height || 'N/A'}</span>
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Weight (kg):</strong>
                 <span className="mt-1 text-gray-900">{profile?.weight || 'N/A'}</span>
               </div>
-              <div>
+              <div className="mb-4">
                 <strong className="block font-medium text-gray-700">Email:</strong>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>

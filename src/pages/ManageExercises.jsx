@@ -149,11 +149,12 @@ export function ManageExercises() {
         />
       )}
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-4">Manage Exercises</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Manage Exercises</h1>
+      </div>
         {exercises.length === 0 ? (
           <div className="text-gray-500">No exercises found.</div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto px-4">
             <table className="min-w-full bg-white border border-gray-200 text-sm">
               <thead>
                 <tr className="bg-gray-100">
@@ -193,7 +194,7 @@ export function ManageExercises() {
             </table>
           </div>
         )}
-      </div>
+      
 
       {/* Edit Modal */}
       {isEditModalOpen && (

@@ -240,7 +240,7 @@ export function Dashboard() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-2">
-          <div className="w-full">
+          <div className="w-full sm:w-1/2">
             <label htmlFor="date-range" className="block text-sm font-medium text-gray-700">
               Date Range
             </label>

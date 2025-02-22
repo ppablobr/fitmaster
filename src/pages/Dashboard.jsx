@@ -51,6 +51,7 @@ export function Dashboard() {
   })
   const [loading, setLoading] = useState(true)
   const [userId, setUserId] = useState(null)
+  const [dateRange, setDateRange] = useState('')
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [version, setVersion] = useState('1.0') // Initialize version state
@@ -89,6 +90,46 @@ export function Dashboard() {
     if (day.length < 2) day = '0' + day
 
     return [year, month, day].join('-')
+  }
+
+  const handleDateRangeChange = (e) => {
+    const range = e.target.value
+    setDateRange(range)
+
+    let start = null
+    let end = null
+
+    const today = new Date()
+    const todayISO = today.toISOString().split('T')[0]
+
+    switch (range) {
+      case 'last-week':
+        const lastWeekStart = new Date(today)
+        lastWeekStart.setDate(today.getDate() - 7)
+        start = lastWeekStart
+        end = today
+        break
+      case 'this-month':
+        const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1)
+        start = thisMonthStart
+        end = today
+        break
+      case 'last-month':
+        const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+        const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0)
+        start = lastMonthStart
+        end = lastMonthEnd
+        break
+      case 'all-time':
+        start = null
+        end = null
+        break
+      default:
+        break
+    }
+
+    setStartDate(start)
+    setEndDate(end)
   }
 
   const fetchExerciseData = async () => {
@@ -200,26 +241,21 @@ export function Dashboard() {
 
         <div className="flex flex-col sm:flex-row gap-4 mb-2">
           <div className="w-full">
-            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">
-              Start Date
+            <label htmlFor="date-range" className="block text-sm font-medium text-gray-700">
+              Date Range
             </label>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="yyyy-MM-dd"
+            <select
+              id="date-range"
               className="mt-1 p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm w-full"
-            />
-          </div>
-          <div className="w-full sm:mb-0">
-            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">
-              End Date
-            </label>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              dateFormat="yyyy-MM-dd"
-              className="p-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm w-full"
-            />
+              value={dateRange}
+              onChange={handleDateRangeChange}
+            >
+              <option value="">Select Range</option>
+              <option value="last-week">Last Week</option>
+              <option value="this-month">This Month</option>
+              <option value="last-month">Last Month</option>
+              <option value="all-time">All Time</option>
+            </select>
           </div>
         </div>
 

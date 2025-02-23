@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Activity, LineChart, LogIn, LogOut, AlertTriangle, List, User, ChevronDown } from 'lucide-react'
+import { Menu, X, Activity, LineChart, LogIn, LogOut, List, User, ChevronDown } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 export function Navigation() {
@@ -9,7 +9,6 @@ export function Navigation() {
   const [user, setUser] = React.useState(null)
   const [showLogoutConfirmation, setShowLogoutConfirmation] = React.useState(false)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-  const [isAccountMenuOpen, setIsAccountMenuOpen] = React.useState(false)
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -48,20 +47,16 @@ export function Navigation() {
   }
 
   const linkClass = (path) => `
-        ${isActive(path)
-          ? 'text-primary font-semibold'
-          : 'text-gray-700 hover:text-primary'
-        } px-3 py-2 rounded-md text-sm font-medium
-      `
+    ${isActive(path)
+      ? 'text-primary font-semibold'
+      : 'text-gray-700 hover:text-primary'
+    } px-3 py-2 rounded-md text-sm font-medium
+  `
 
   const shouldShowHome = !(location.pathname === '/dashboard' || location.pathname === '/tracker' || location.pathname === '/manage' || location.pathname === '/account')
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
-  }
-
-  const toggleAccountMenu = () => {
-    setIsAccountMenuOpen(!isAccountMenuOpen)
   }
 
   return (
@@ -76,63 +71,58 @@ export function Navigation() {
           </div>
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <div className="flex space-x-4">
-              {user && (
-                <div className="relative">
-                  <button
-                    onClick={toggleMenu}
-                    className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center"
-                  >
-                    Features
-                    <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  {isMenuOpen && (
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                      <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        {!user && shouldShowHome && (
-                          <Link to="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                            Home
-                          </Link>
-                        )}
-                        <Link to="/tracker" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                          Track Exercise
-                        </Link>
-                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                          Dashboard
-                        </Link>
-                        <Link to="/manage" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                          Manage Exercises
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {user ? (
+            {user && (
               <div className="relative">
                 <button
-                  onClick={toggleAccountMenu}
+                  onClick={toggleMenu}
                   className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center"
                 >
-                  Account
-                  <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isAccountMenuOpen ? 'rotate-180' : ''}`} />
+                  Features
+                  <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {isAccountMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" tabIndex="-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <div className="py-1" role="none">
-                      <Link
-                        to="/account"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                {isMenuOpen && (
+                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                      <Link 
+                        to="/tracker" 
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
                         role="menuitem"
                       >
-                        My Account
+                        <Activity className="h-4 w-4" />
+                        Track Exercise
+                      </Link>
+                      <Link 
+                        to="/dashboard" 
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                        role="menuitem"
+                      >
+                        <LineChart className="h-4 w-4" />
+                        Dashboard
+                      </Link>
+                      <Link 
+                        to="/manage" 
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                        role="menuitem"
+                      >
+                        <List className="h-4 w-4" />
+                        Manage Exercises
                       </Link>
                     </div>
                   </div>
                 )}
               </div>
+            )}
+
+            {user ? (
+              <>
+                <Link
+                  to="/account"
+                  className={`${linkClass('/account')} hover:bg-gray-100 p-2 rounded-full transition-colors duration-200 ml-2`}
+                  title="Account Settings"
+                >
+                  <User className="h-5 w-5" />
+                </Link>
+              </>
             ) : (
               <Link to="/login" className={linkClass('/login')}>
                 <div className="flex items-center gap-1">
@@ -177,7 +167,10 @@ export function Navigation() {
                   className={`${linkClass('/tracker')} block`}
                   onClick={() => setIsOpen(false)}
                 >
-                  Track Exercise
+                  <div className="flex items-center gap-1">
+                    <Activity className="h-4 w-4" />
+                    Track Exercise
+                  </div>
                 </Link>
                 <Link
                   to="/dashboard"
@@ -209,17 +202,18 @@ export function Navigation() {
                     Account
                   </div>
                 </Link>
+                <button 
+                  onClick={handleOpenLogoutConfirmation} 
+                  className="text-gray-700 hover:text-primary block px-3 py-2 rounded-md text-sm font-medium w-full text-left"
+                >
+                  <div className="flex items-center gap-1">
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </div>
+                </button>
               </>
             )}
-            {user ? (
-              <button onClick={handleOpenLogoutConfirmation} className="text-gray-700 hover:text-primary block px-3 py-2 rounded-md text-sm font-medium w-full text-left"
-              >
-                <div className="flex items-center gap-1">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </div>
-              </button>
-            ) : (
+            {!user && (
               <Link
                 to="/login"
                 className={`${linkClass('/login')} block`}

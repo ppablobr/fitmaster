@@ -131,7 +131,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <User className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Name:</strong>
+                  <strong className="font-medium text-gray-700">Name</strong>
                 </div>
                 <input
                   type="text"
@@ -144,7 +144,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Age:</strong>
+                  <strong className="font-medium text-gray-700">Age</strong>
                 </div>
                 <input
                   type="number"
@@ -157,7 +157,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Gender:</strong>
+                  <strong className="font-medium text-gray-700">Gender</strong>
                 </div>
                 <select
                   name="gender"
@@ -174,7 +174,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Ruler className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Height (cm):</strong>
+                  <strong className="font-medium text-gray-700">Height (cm)</strong>
                 </div>
                 <input
                   type="number"
@@ -187,7 +187,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <WeightIcon className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Weight (kg):</strong>
+                  <strong className="font-medium text-gray-700">Weight (kg)</strong>
                 </div>
                 <input
                   type="number"
@@ -200,7 +200,7 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Mail className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Email:</strong>
+                  <strong className="font-medium text-gray-700">Email</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>
@@ -210,42 +210,42 @@ export function Account() {
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <User className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Name:</strong>
+                  <strong className="font-medium text-gray-700">Name</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{profile?.name || 'N/A'}</span>
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Age:</strong>
+                  <strong className="font-medium text-gray-700">Age</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{profile?.age || 'N/A'}</span>
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Gender:</strong>
+                  <strong className="font-medium text-gray-700">Gender</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{profile?.gender || 'N/A'}</span>
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Ruler className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Height (cm):</strong>
+                  <strong className="font-medium text-gray-700">Height (cm)</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{profile?.height || 'N/A'}</span>
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <WeightIcon className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Weight (kg):</strong>
+                  <strong className="font-medium text-gray-700">Weight (kg)</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{profile?.weight || 'N/A'}</span>
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-2">
                   <Mail className="h-5 w-5 text-gray-500" />
-                  <strong className="font-medium text-gray-700">Email:</strong>
+                  <strong className="font-medium text-gray-700">Email</strong>
                 </div>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>

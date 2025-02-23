@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
+import { 
+  LogOut, 
+  User, 
+  Calendar, 
+  Users, 
+  Ruler, 
+  Weight as WeightIcon,
+  Mail 
+} from 'lucide-react';
 import { Toast } from '../components/Toast';
 
 export function Account() {
@@ -72,13 +80,12 @@ export function Account() {
   };
 
   const handleSaveProfile = async () => {
-    // Update profile data
     const { error: profileError } = await supabase
       .from('profiles')
       .upsert({
         id: user.id,
         ...updatedProfile,
-      }, { returning: 'minimal' }); // Ensure only updating, not creating new rows
+      }, { returning: 'minimal' });
 
     if (profileError) {
       console.error('Error updating profile:', profileError);
@@ -122,7 +129,10 @@ export function Account() {
           {isEditing ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Name:</strong>
+                <div className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Name:</strong>
+                </div>
                 <input
                   type="text"
                   name="name"
@@ -132,7 +142,10 @@ export function Account() {
                 />
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Age:</strong>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Age:</strong>
+                </div>
                 <input
                   type="number"
                   name="age"
@@ -142,7 +155,10 @@ export function Account() {
                 />
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Gender:</strong>
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Gender:</strong>
+                </div>
                 <select
                   name="gender"
                   value={updatedProfile?.gender || ''}
@@ -156,7 +172,10 @@ export function Account() {
                 </select>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Height (cm):</strong>
+                <div className="flex items-center gap-2">
+                  <Ruler className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Height (cm):</strong>
+                </div>
                 <input
                   type="number"
                   name="height"
@@ -166,7 +185,10 @@ export function Account() {
                 />
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Weight (kg):</strong>
+                <div className="flex items-center gap-2">
+                  <WeightIcon className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Weight (kg):</strong>
+                </div>
                 <input
                   type="number"
                   name="weight"
@@ -176,34 +198,55 @@ export function Account() {
                 />
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Email:</strong>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Email:</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Name:</strong>
+                <div className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Name:</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{profile?.name || 'N/A'}</span>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Age:</strong>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Age:</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{profile?.age || 'N/A'}</span>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Gender:</strong>
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Gender:</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{profile?.gender || 'N/A'}</span>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Height (cm):</strong>
+                <div className="flex items-center gap-2">
+                  <Ruler className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Height (cm):</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{profile?.height || 'N/A'}</span>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Weight (kg):</strong>
+                <div className="flex items-center gap-2">
+                  <WeightIcon className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Weight (kg):</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{profile?.weight || 'N/A'}</span>
               </div>
               <div className="mb-4">
-                <strong className="block font-medium text-gray-700">Email:</strong>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-gray-500" />
+                  <strong className="font-medium text-gray-700">Email:</strong>
+                </div>
                 <span className="mt-1 text-gray-900">{user.email}</span>
               </div>
             </div>

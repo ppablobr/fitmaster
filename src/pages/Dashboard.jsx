@@ -310,11 +310,12 @@ export function Dashboard() {
 
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Activity Chart</h2>
-          <div className="h-96">
+          <div className="" style={{ height: '400px' }}>
             <Line
               data={chartData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 interaction: {
                   mode: 'index',
                   intersect: false,
@@ -339,6 +340,8 @@ export function Dashboard() {
                     grid: {
                       drawOnChartArea: false,
                     },
+                    min: 0,
+                    max: 12,
                   },
                   y1: {
                     type: 'linear',

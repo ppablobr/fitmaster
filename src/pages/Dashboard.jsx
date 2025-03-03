@@ -100,7 +100,6 @@ export function Dashboard() {
     let end = null
 
     const today = new Date()
-    const todayISO = today.toISOString().split('T')[0]
 
     switch (range) {
       case 'last-week':
@@ -128,6 +127,9 @@ export function Dashboard() {
         break
     }
 
+    console.log('Start Date:', start)
+    console.log('End Date:', end)
+
     setStartDate(start)
     setEndDate(end)
   }
@@ -143,8 +145,16 @@ export function Dashboard() {
         .order('date', { ascending: true })
 
       if (startDate && endDate) {
-        query = query.gte('date', formatDate(startDate)).lte('date', formatDate(endDate))
+        const formattedStartDate = formatDate(startDate)
+        const formattedEndDate = formatDate(endDate)
+
+        console.log('Formatted Start Date:', formattedStartDate)
+        console.log('Formatted End Date:', formattedEndDate)
+
+        query = query.gte('date', formattedStartDate).lte('date', formattedEndDate)
       }
+
+      console.log('Supabase Query:', query.toString())
 
       const { data: exercises, error } = await query
 

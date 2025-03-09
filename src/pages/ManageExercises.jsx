@@ -10,7 +10,8 @@ export function ManageExercises() {
   const [selectedExercise, setSelectedExercise] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ show: false, exerciseId: null })
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -93,23 +94,31 @@ export function ManageExercises() {
     }
   };
 
-  const handleDeleteExercise = async (id) => {
-    if (window.confirm('Are you sure you want to delete this exercise?')) {
-      try {
-        const { error } = await supabase.from('exercises').delete().eq('id', id)
+  const openDeleteConfirmation = (id) => {
+    setDeleteConfirmation({ show: true, exerciseId: id })
+  }
 
-        if (error) {
-          console.error('Error deleting exercise:', error)
-          setToast({ show: true, type: 'error', message: 'Failed to delete exercise.' });
-        } else {
-          // Optimistically update the state
-          setExercises(exercises.filter(exercise => exercise.id !== id));
-          setToast({ show: true, type: 'success', message: 'Exercise deleted successfully!' });
-        }
-      } catch (err) {
-        console.error('Error deleting exercise:', err)
-        setToast({ show: true, type: 'error', message: 'Unexpected error deleting exercise.' });
+  const closeDeleteConfirmation = () => {
+    setDeleteConfirmation({ show: false, exerciseId: null })
+  }
+
+  const handleDeleteExercise = async (id) => {
+    try {
+      const { error } = await supabase.from('exercises').delete().eq('id', id)
+
+      if (error) {
+        console.error('Error deleting exercise:', error)
+        setToast({ show: true, type: 'error', message: 'Failed to delete exercise.' })
+      } else {
+        // Optimistically update the state
+        setExercises(exercises.filter(exercise => exercise.id !== id))
+        setToast({ show: true, type: 'success', message: 'Exercise deleted successfully!' })
       }
+    } catch (err) {
+      console.error('Error deleting exercise:', err)
+      setToast({ show: true, type: 'error', message: 'Unexpected error deleting exercise.' })
+    } finally {
+      closeDeleteConfirmation()
     }
   }
 
@@ -182,7 +191,7 @@ export function ManageExercises() {
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => handleDeleteExercise(exercise.id)}
+                        onClick={() => openDeleteConfirmation(exercise.id)}
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -205,6 +214,49 @@ export function ManageExercises() {
           onUpdate={handleUpdateExercise}
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.show && (
+        <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 text-center">
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+              <div className="sm:flex sm:items-start">
+                <div className="mt-3 text-center sm:mt-0 sm:text-left">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                    Delete Exercise
+                  </h3>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Are you sure you want to delete this exercise? This action cannot be undone.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => handleDeleteExercise(deleteConfirmation.exerciseId)}
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                  onClick={closeDeleteConfirmation}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

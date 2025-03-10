@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { ExerciseTracker } from './pages/ExerciseTracker'
 import { Dashboard } from './pages/Dashboard'
 import { ManageExercises } from './pages/ManageExercises'
+import { Goals } from './pages/Goals'
 import { Account } from './pages/Account'
 import { Layout } from './components/Layout'
 import { Auth } from './components/Auth'
@@ -43,6 +44,10 @@ function App() {
         <Route
           path="/manage"
           element={user ? <ManageExercises /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/goals"
+          element={user ? <Goals /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/account"

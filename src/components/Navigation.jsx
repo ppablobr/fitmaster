@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Activity, LineChart, LogIn, LogOut, List, User, ChevronDown } from 'lucide-react'
+import { Menu, X, Activity, LineChart, LogIn, LogOut, List, User, ChevronDown, Target } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 export function Navigation() {
@@ -53,7 +53,7 @@ export function Navigation() {
     } px-3 py-2 rounded-md text-sm font-medium
   `
 
-  const shouldShowHome = !(location.pathname === '/dashboard' || location.pathname === '/tracker' || location.pathname === '/manage' || location.pathname === '/account')
+  const shouldShowHome = !(location.pathname === '/dashboard' || location.pathname === '/tracker' || location.pathname === '/manage' || location.pathname === '/account' || location.pathname === '/goals')
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -106,6 +106,14 @@ export function Navigation() {
                       >
                         <List className="h-4 w-4" />
                         Manage Exercises
+                      </Link>
+                      <Link 
+                        to="/goals" 
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                        role="menuitem"
+                      >
+                        <Target className="h-4 w-4" />
+                        Fitness Goals
                       </Link>
                     </div>
                   </div>
@@ -190,6 +198,16 @@ export function Navigation() {
                   <div className="flex items-center gap-1">
                     <List className="h-4 w-4" />
                     Manage Exercises
+                  </div>
+                </Link>
+                <Link
+                  to="/goals"
+                  className={`${linkClass('/goals')} block`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div className="flex items-center gap-1">
+                    <Target className="h-4 w-4" />
+                    Fitness Goals
                   </div>
                 </Link>
                 <Link
